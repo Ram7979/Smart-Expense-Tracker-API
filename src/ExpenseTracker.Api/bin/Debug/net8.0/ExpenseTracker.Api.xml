@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ExpenseTracker.Api</name>
+    </assembly>
+    <members>
+        <member name="T:ExpenseTracker.Api.Controllers.ExpensesController">
+            <summary>
+            Handles all /api/expenses routes.
+            Controller is deliberately thin: input validation, delegate to service, return result.
+            </summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Controllers.ExpensesController.Create(ExpenseTracker.Api.DTOs.CreateExpenseRequest)">
+            <summary>Create a new expense.</summary>
+            <response code="201">Expense created successfully.</response>
+            <response code="400">Validation failed — see errors array for field-level detail.</response>
+        </member>
+        <member name="M:ExpenseTracker.Api.Controllers.ExpensesController.GetAll(System.String)">
+            <summary>
+            Retrieve all expenses. Optionally filter by category (case-insensitive).
+            Returns an empty array if no expenses match — never 404 on a collection.
+            </summary>
+            <param name="category">Optional category filter (case-insensitive).</param>
+            <response code="200">List of expenses (may be empty).</response>
+        </member>
+        <member name="M:ExpenseTracker.Api.Controllers.ExpensesController.GetById(System.Guid)">
+            <summary>Retrieve a single expense by ID.</summary>
+            <response code="200">The expense.</response>
+            <response code="404">No expense with the given ID exists.</response>
+        </member>
+        <member name="M:ExpenseTracker.Api.Controllers.ExpensesController.GetTotal(System.String)">
+            <summary>
+            Returns the sum of all expense amounts.
+            Optionally scoped to a single category.
+            </summary>
+            <param name="category">Optional category to scope the total.</param>
+            <response code="200">Total amount.</response>
+        </member>
+        <member name="M:ExpenseTracker.Api.Controllers.ExpensesController.GetTotalsByCategory">
+            <summary>Returns a dictionary of category → total amount for all categories.</summary>
+            <response code="200">Map of category names to their totals.</response>
+        </member>
+        <member name="M:ExpenseTracker.Api.Controllers.ExpensesController.Delete(System.Guid)">
+            <summary>Delete an expense by ID.</summary>
+            <response code="204">Deleted successfully.</response>
+            <response code="404">No expense with the given ID exists.</response>
+        </member>
+        <member name="T:ExpenseTracker.Api.DTOs.CreateExpenseRequest">
+            <summary>
+            Input DTO for creating a new expense. All fields are validated by CreateExpenseRequestValidator.
+            </summary>
+        </member>
+        <member name="T:ExpenseTracker.Api.DTOs.ExpenseResponse">
+            <summary>
+            Response DTO returned to callers after creating or retrieving an expense.
+            Mirrors the Expense model but is explicitly shaped for the API contract.
+            </summary>
+        </member>
+        <member name="T:ExpenseTracker.Api.DTOs.TotalResponse">
+            <summary>
+            DTO wrapping the total amount for a /total query.
+            </summary>
+        </member>
+        <member name="T:ExpenseTracker.Api.Interfaces.IExpenseRepository">
+            <summary>
+            Abstracts the expense data store so the service layer is independent of storage technology.
+            All implementations must be thread-safe.
+            </summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Interfaces.IExpenseRepository.Add(ExpenseTracker.Api.Models.Expense)">
+            <summary>Persist a new expense and return it.</summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Interfaces.IExpenseRepository.GetAll(System.String)">
+            <summary>Return all stored expenses, optionally filtered by category (case-insensitive).</summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Interfaces.IExpenseRepository.GetById(System.Guid)">
+            <summary>Return a single expense by ID, or null if not found.</summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Interfaces.IExpenseRepository.Delete(System.Guid)">
+            <summary>Remove an expense by ID. Returns true if deleted, false if not found.</summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Interfaces.IExpenseRepository.GetTotal(System.String)">
+            <summary>Return the sum of amounts for all expenses, or for a single category.</summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Interfaces.IExpenseRepository.GetTotalsByCategory">
+            <summary>Return a dictionary mapping each category name to its total amount.</summary>
+        </member>
+        <member name="T:ExpenseTracker.Api.Interfaces.IExpenseService">
+            <summary>
+            Encapsulates business logic for expenses, keeping controllers thin.
+            The service owns mapping between domain models and DTOs.
+            </summary>
+        </member>
+        <member name="T:ExpenseTracker.Api.Middleware.GlobalExceptionMiddleware">
+            <summary>
+            Global exception handler that converts unhandled exceptions into a consistent
+            JSON error shape: { "error": "message" }. Logs the full exception for debugging.
+            This avoids leaking stack traces to clients in production.
+            </summary>
+        </member>
+        <member name="T:ExpenseTracker.Api.Models.Expense">
+            <summary>
+            Core domain entity representing a single expense record.
+            Using a record for immutability at the model level; updates create new instances.
+            </summary>
+        </member>
+        <member name="T:ExpenseTracker.Api.Repositories.InMemoryExpenseRepository">
+            <summary>
+            Thread-safe in-memory expense store backed by ConcurrentDictionary.
+            ConcurrentDictionary was chosen over List&lt;T&gt;+lock because it provides
+            atomic operations without requiring manual lock management.
+            </summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Repositories.InMemoryExpenseRepository.Add(ExpenseTracker.Api.Models.Expense)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Repositories.InMemoryExpenseRepository.GetAll(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Repositories.InMemoryExpenseRepository.GetById(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Repositories.InMemoryExpenseRepository.Delete(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Repositories.InMemoryExpenseRepository.GetTotal(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Repositories.InMemoryExpenseRepository.GetTotalsByCategory">
+            <inheritdoc />
+        </member>
+        <member name="T:ExpenseTracker.Api.Services.ExpenseService">
+            <summary>
+            Contains business logic for expense operations.
+            Responsible for mapping between CreateExpenseRequest/ExpenseResponse and the Expense domain model.
+            </summary>
+        </member>
+        <member name="M:ExpenseTracker.Api.Services.ExpenseService.Add(ExpenseTracker.Api.DTOs.CreateExpenseRequest)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Services.ExpenseService.GetAll(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Services.ExpenseService.GetById(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Services.ExpenseService.Delete(System.Guid)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Services.ExpenseService.GetTotal(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExpenseTracker.Api.Services.ExpenseService.GetTotalsByCategory">
+            <inheritdoc />
+        </member>
+        <member name="T:ExpenseTracker.Api.Validation.CreateExpenseRequestValidator">
+            <summary>
+            FluentValidation rules for the CreateExpenseRequest DTO.
+            Rules are intentionally kept short and explicit; no magic numbers outside this file.
+            </summary>
+        </member>
+    </members>
+</doc>
