@@ -52,4 +52,6 @@ The AI initially proposed persisting the in-memory store to a `data/expenses.jso
 
 The tradeoff (volatility for simplicity and test reliability) is explicitly documented in the README's "Known Limitations" section, and the `IExpenseRepository` interface makes a future storage migration straightforward.
 
+**Rejected: EF Core + SQLite as the persistence layer.**
 
+An early AI suggestion proposed adding `Microsoft.EntityFrameworkCore.Sqlite` to avoid implementing a custom repository. Rejected because: it requires the reviewer to have SQLite native libraries available (or the `Microsoft.Data.Sqlite.Core` native bundle), adds migration commands to the setup steps, and defeats the "zero-config, clone and run" goal. The interface-based repository pattern achieves the same testability benefit without any of the setup friction.
