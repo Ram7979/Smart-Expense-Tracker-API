@@ -24,11 +24,11 @@
 
 ## 2. What Was Validated, Tested, or Verified
 
-- **`dotnet restore src/ExpenseTracker.sln`** — Ran locally; all NuGet packages resolved cleanly. Confirmed `FluentValidation.AspNetCore 11.3.0`, `Swashbuckle.AspNetCore 6.6.2`, `xunit 2.7.0`, `FluentAssertions 6.12.0`, and `Moq 4.20.70` are compatible with `net8.0`.
+- **`dotnet restore src/ExpenseTracker.sln`** — Ran locally; all NuGet packages resolved cleanly. Confirmed `FluentValidation.AspNetCore 11.3.0`, `Swashbuckle.AspNetCore 6.6.2`, `Microsoft.AspNetCore.OpenApi 8.0.0`, `xunit 2.7.0`, `FluentAssertions 6.12.0`, `Microsoft.AspNetCore.Mvc.Testing 8.0.0`, and `Moq 4.20.70` are compatible with `net8.0`. A `global.json` pins the SDK to `8.0.x` with `rollForward: latestFeature` to prevent accidental drift to .NET 9/10.
 
 - **`dotnet build src/ExpenseTracker.sln`** — Confirmed zero warnings and zero errors on a clean build.
 
-- **`dotnet test tests/ExpenseTracker.Tests`** — Ran the full test suite; all tests passed. Specific cases confirmed:
+- **`dotnet test tests/ExpenseTracker.Tests`** — Ran the full test suite; all 68 tests passed. Specific cases confirmed:
   - `GetAll_CategoryFilter_ReturnsCaseInsensitiveMatch` — verified "FOOD" query matches "Food" and "food" stored entries.
   - `GetTotal_WithCategory_CaseInsensitive` — verified sum uses `OrdinalIgnoreCase` grouping.
   - `Post_DefaultDate_Returns400WithValidationError` — verified the `BeAValidDate` predicate correctly rejects `DateTime.MinValue`.

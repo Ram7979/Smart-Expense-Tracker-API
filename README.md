@@ -6,8 +6,7 @@ A RESTful API built with ASP.NET Core Web API (.NET 8) for tracking personal exp
 
 ## Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8) (version 8.x or later) — verify with `dotnet --version`
-  > **Note:** The project targets `net10.0` in this repository because that is the runtime installed in the development environment where it was verified. If you have only .NET 8 installed, change `<TargetFramework>net10.0</TargetFramework>` to `<TargetFramework>net8.0</TargetFramework>` in both `.csproj` files and update the `Microsoft.AspNetCore.Mvc.Testing` package version to `8.0.0` in the test project. All code is fully compatible with .NET 8+.
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8) — verify with `dotnet --version` (must be `8.x.x` or later)
 
 ---
 

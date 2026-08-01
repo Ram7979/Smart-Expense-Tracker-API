@@ -23,6 +23,7 @@ D:\tmp\Smart Expense Tracker API\src\ExpenseTracker.Api\obj\Debug\net8.0\Expense
 D:\tmp\Smart Expense Tracker API\src\ExpenseTracker.Api\obj\Debug\net8.0\ExpenseTracker.Api.csproj.CoreCompileInputs.cache
 D:\tmp\Smart Expense Tracker API\src\ExpenseTracker.Api\obj\Debug\net8.0\ExpenseTracker.Api.MvcApplicationPartsAssemblyInfo.cs
 D:\tmp\Smart Expense Tracker API\src\ExpenseTracker.Api\obj\Debug\net8.0\ExpenseTracker.Api.MvcApplicationPartsAssemblyInfo.cache
+D:\tmp\Smart Expense Tracker API\src\ExpenseTracker.Api\obj\Debug\net8.0\ExpenseTracker.Api.sourcelink.json
 D:\tmp\Smart Expense Tracker API\src\ExpenseTracker.Api\obj\Debug\net8.0\rjimswa.dswa.cache.json
 D:\tmp\Smart Expense Tracker API\src\ExpenseTracker.Api\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 D:\tmp\Smart Expense Tracker API\src\ExpenseTracker.Api\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
